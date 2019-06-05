@@ -19,7 +19,7 @@
             <div id="app">
                     
 
-                    <el-tabs type="card" @tab-click="handleClick">
+                    <el-tabs type="card">
                         <el-tab-pane label="Operaciones">
 
                             <el-button @click="visible = true">Nuevo Donador</el-button>
@@ -33,8 +33,8 @@
                             <el-button @click="visible2 = true">Beneficiario</el-button>
                                 <el-dialog :visible.sync="visible2" title="Registro">
                                      <span class="demo-input-label">Nombre:</span>
-                                     <el-input placeholder="Escribe tu nombre" v-model="input"></el-input> <br><br>
-                                      <el-button round @click="visible = true" type="success">Registrar</el-button>
+                                     <el-input placeholder="Escribe tu nombre" v-model="beneficiario.nombre"></el-input> <br><br>
+                                      <el-button round @click="registrarBeneficiario" type="success">Registrar</el-button>
 
                             
                                  </el-dialog>
@@ -42,28 +42,31 @@
 
                             <el-button @click="visible3 = true">Donar</el-button>
                                 <el-dialog :visible.sync="visible3" title="Donar">
+
                                      <span class="demo-input-label">Donador:</span>
-                                     <el-select v-model="value" placeholder="Select">
+                                     <el-select v-model="donacion.donador" placeholder="Select">
                                         <el-option
-                                        v-for="item in options"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
+                                        v-for="item in donadores"
+                                        :key="item.id"
+                                        :label="item.nombre"
+                                        :value="item.id">
                                         </el-option>
                                     </el-select> <br><br>
+
                                     <span class="demo-input-label">Beneficiario:</span>
-                                     <el-select v-model="value" placeholder="Select"> 
+                                     <el-select v-model="donacion.beneficiario" placeholder="Select"> 
                                         <el-option
-                                        v-for="item in options"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
+                                        v-for="item in beneficiarios"
+                                        :key="item.id"
+                                        :label="item.nombre"
+                                        :value="item.id">
                                         </el-option> 
                                     </el-select> <br>
-                                     <span class="demo-input-label">Cantidad:</span>
-                                     <el-input placeholder="Escribe el monto" v-model="input" type="number"></el-input> <br><br>
 
-                                      <el-button round @click="registrarDonador" native-type="submit" type="success">Registrar</el-button>
+                                     <span class="demo-input-label">Cantidad:</span>
+                                     <el-input placeholder="Escribe el monto" v-model="cantidad" type="number"></el-input> <br><br>
+
+                                      <el-button round @click="" native-type="submit" type="success">Registrar</el-button>
                                      
                                 
                                 </el-dialog>
@@ -80,7 +83,7 @@
                                         :value="item.value">
                                         </el-option> 
                          </el-select> <br><br>
-                              <el-table
+                              {{-- <el-table
                                     :data="tableData"
                                     border
                                     style="width: 100%">
@@ -96,7 +99,7 @@
                                     prop="address"
                                     label="Cantidad">
                                     </el-table-column>
-                                </el-table>
+                                </el-table> --}}
                            </el-tab-pane>
                             
                    
@@ -126,10 +129,23 @@
                     visible3: false,
                     donador:{
                         nombre: null
-                    }
+                    },
+                    beneficiario:{
+                        nombre:null
+                    },
+                    beneficiarios:[],
+                    donadores:[],
+                    donacion:{
+                        donador: null,
+                        beneficiario: null,
+                        cantidad: null
+                    },
+                    cantidad:0
+
                 },     
                 mounted() {
-                   
+                   this.obtenerDonadores();
+                   this.obtenerBeneficiarios();
                 },  
                 methods: {
                     registrarDonador()
@@ -152,11 +168,48 @@
                             }
                             
                         });
+                    },
+                    registrarBeneficiario()
+                    {
+                        $.post('registrarBeneficiario',
+                        {
+                            'beneficiario' : this.beneficiario
+                        }).done(res => {
+                            console.log('La respuesta es: ', res);
+                            if(res == 1){
+                                this.$message({
+                                    message: 'Beneficiario registrado con exito',
+                                    type:'success'
+                                });
+                            } else{
+                                this.$message.error('No se puede registar');
+                            }
+                        })  
+                    },
+                    obtenerDonadores()
+                    {
+                        $.get('obtenerDonadores')
+                        .done(res=>{
+                            this.donadores = res;
+                        });       
+                    },
+                    obtenerBeneficiarios()
+                    {
+                        $.get('obtenerBeneficiario')
+                        .done(res=>{
+                            this.beneficiarios = res;
+                        });
+                    },
+                    donacionfinal(id_ben, id_don, cantidad){
+                        $.post('donacionfinal')
+                        .done(res=>){
+                            
+                        }
                     }
-                },  
-        });
-            
+                }
 
+            
+            });
      </script>
         
     </body>
