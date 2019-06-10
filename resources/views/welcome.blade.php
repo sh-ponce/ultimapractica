@@ -64,26 +64,28 @@
                                     </el-select> <br>
 
                                      <span class="demo-input-label">Cantidad:</span>
-                                     <el-input placeholder="Escribe el monto" v-model="cantidad" type="number"></el-input> <br><br>
+                                     <el-input placeholder="Escribe el monto" v-model="donacion.cantidad" type="number"></el-input> <br><br>
 
-                                      <el-button round @click="" native-type="submit" type="success">Registrar</el-button>
+                                      <el-button round @click="donacionfinal" native-type="submit" type="success">Registrar</el-button>
                                      
                                 
                                 </el-dialog>
 
                         </el-tab-pane>
 
+                        {{------Empieza la segunda pestaña-----}}
+
                         <el-tab-pane label="Beneficiario">
                             
-                        <el-select v-model="value" placeholder="Select"> 
+                        <el-select v-model="donacion.beneficiario" placeholder="Beneficiario"> 
                                         <el-option
-                                        v-for="item in options"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
+                                        v-for="item in beneficiarios"
+                                        :key="item.id"
+                                        :label="item.nombre"
+                                        :value="item.id">
                                         </el-option> 
                          </el-select> <br><br>
-                              {{-- <el-table
+                               <el-table
                                     :data="tableData"
                                     border
                                     style="width: 100%">
@@ -99,7 +101,7 @@
                                     prop="address"
                                     label="Cantidad">
                                     </el-table-column>
-                                </el-table> --}}
+                                </el-table> 
                            </el-tab-pane>
                             
                    
@@ -150,10 +152,12 @@
                 methods: {
                     registrarDonador()
                     {
-                        $.post('registrarDonador',
-                        {
-                            'donador' : this.donador
-                        }).done(res=>{
+                        $.post(
+                            'registrarDonador',
+                            {
+                                'donador' : this.donador
+                            }
+                        ).done(res=>{
                             console.log('La rspuesta es: ', res);
                             if(res == 1){
                                 
@@ -200,11 +204,21 @@
                             this.beneficiarios = res;
                         });
                     },
-                    donacionfinal(id_ben, id_don, cantidad){
-                        $.post('donacionfinal')
-                        .done(res=>){
-                            
-                        }
+                    donacionfinal(){
+                        
+                        $.post(
+                            'donacionfinal',
+                            {
+                                'donacion' : this.donacion
+                            }
+                        )
+                        .done(res=>{
+                            this.$message({
+                                message:"Donación exitosa",
+                                type:'success'
+                            });
+
+                        })
                     }
                 }
 

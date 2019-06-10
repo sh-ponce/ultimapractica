@@ -20,5 +20,5 @@ Route::post('registrarDonador', 'DonacionesPracticaController@registrarDonador')
 Route::post('registrarBeneficiario', 'DonacionesPracticaController@registrarBeneficiario');
 Route::get('obtenerDonadores', 'DonacionesPracticaController@obtenerDonadores');
 Route::get('obtenerBeneficiario','DonacionesPracticaController@obtenerBeneficiario');
-Route::post('donacionfinal', 'DonacionesPracticasController@donacionfinal');
+Route::post('donacionfinal', 'DonacionesPracticaController@donacionfinal');
 

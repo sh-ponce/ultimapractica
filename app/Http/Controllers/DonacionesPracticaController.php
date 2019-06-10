@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Donador;
 use App\Beneficiario;
+use App\Donacion;
 
 class DonacionesPracticaController extends Controller
 {
@@ -49,9 +50,20 @@ class DonacionesPracticaController extends Controller
     public function obtenerBeneficiario(Request $request){
         return Beneficiario::all();
     }
-    public function donacionfinal(Request $request){
+    public function donacionfinal(Request $request)
+    {
+        $datos = $request->get('donacion');
+
+        $donacion = new Donacion();
+        $donacion->donador_id = $datos['donador'];
+        $donacion->beneficiario_id = $datos['beneficiario'];
+        $donacion->cantidad = $datos['cantidad'];
+        $donacion->save();
+        
 
 
+
+        
     }
 
 
