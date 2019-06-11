@@ -77,7 +77,7 @@
 
                         <el-tab-pane label="Beneficiario">
                             
-                        <el-select v-model="donacion.beneficiario" placeholder="Beneficiario"> 
+                        <el-select v-model="beneficiarioSeleccionado" placeholder="Beneficiario" @change="obtenerDonaciones"> 
                                         <el-option
                                         v-for="item in beneficiarios"
                                         :key="item.id"
@@ -85,22 +85,27 @@
                                         :value="item.id">
                                         </el-option> 
                          </el-select> <br><br>
+
                                <el-table
-                                    :data="tableData"
+                                    :data="donaciones"
                                     border
                                     style="width: 100%">
+
                                     <el-table-column
-                                    prop="date"
-                                    label="Fecha">
-                                    </el-table-column>
-                                    <el-table-column
-                                    prop="name"
+                                    prop="donador_id"
                                     label="Donador">
                                     </el-table-column>
+
                                     <el-table-column
-                                    prop="address"
+                                    prop="cantidad"
                                     label="Cantidad">
                                     </el-table-column>
+
+                                    <el-table-column
+                                    prop="fecha"
+                                    label="Fecha">
+                                    </el-table-column>
+                                    
                                 </el-table> 
                            </el-tab-pane>
                             
@@ -142,7 +147,9 @@
                         beneficiario: null,
                         cantidad: null
                     },
-                    cantidad:0
+                    cantidad:0,
+                    beneficiarioSeleccionado: null,
+                    donaciones:[]
 
                 },     
                 mounted() {
@@ -150,6 +157,14 @@
                    this.obtenerBeneficiarios();
                 },  
                 methods: {
+                    obtenerDonaciones()
+                    {
+                        let id = this.beneficiarioSeleccionado;
+
+                        $.get('consultarDonaciones/' + id).done(res =>{
+                            this.donaciones = res;
+                        });
+                    },
                     registrarDonador()
                     {
                         $.post(
@@ -219,6 +234,7 @@
                             });
 
                         })
+
                     }
                 }
 

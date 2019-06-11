@@ -59,11 +59,12 @@ class DonacionesPracticaController extends Controller
         $donacion->beneficiario_id = $datos['beneficiario'];
         $donacion->cantidad = $datos['cantidad'];
         $donacion->save();
-        
+    }
 
-
-
-        
+    public function consultarDonaciones($id)
+    {
+        $donaciones = Donacion::where('beneficiario_id', $id)->get();
+        return  $donaciones;
     }
 
 
