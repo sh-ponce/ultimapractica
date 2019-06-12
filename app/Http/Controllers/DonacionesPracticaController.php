@@ -63,7 +63,7 @@ class DonacionesPracticaController extends Controller
 
     public function consultarDonaciones($id)
     {
-        $donaciones = Donacion::where('beneficiario_id', $id)->get();
+        $donaciones = Donacion::with('donador')->where('beneficiario_id', $id)->get();
         return  $donaciones;
     }
 

@@ -91,15 +91,25 @@
                                     border
                                     style="width: 100%">
 
-                                    <el-table-column
-                                    prop="donador_id"
+                                    <el-table-column                                  
                                     label="Donador">
+                                        <template slot-scope="object">
+                                              ${object.row.donador.nombre}
+                                        </template>
                                     </el-table-column>
 
                                     <el-table-column
-                                    prop="cantidad"
                                     label="Cantidad">
+                                        <template slot-scope="object">
+                                               <el-tag type="success">$ ${object.row.cantidad}</el-tag> 
+                                        </template>
                                     </el-table-column>
+
+                                    <el-table-column
+                                    label="Extra">
+            
+                                    </el-table-column>
+
 
                                     <el-table-column
                                     prop="fecha"
@@ -163,6 +173,7 @@
 
                         $.get('consultarDonaciones/' + id).done(res =>{
                             this.donaciones = res;
+                            console.log(this.donaciones);
                         });
                     },
                     registrarDonador()
@@ -236,7 +247,8 @@
                         })
 
                     }
-                }
+                },
+                delimiters: ['${','}']
 
             
             });
